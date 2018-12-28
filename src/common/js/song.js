@@ -1,4 +1,7 @@
-export default class Song {
+import {getSongsUrl} from 'api/song'
+import {ERR_OK} from 'api/config'
+
+class Song {
     constructor({id, mid, singer, name, album, duration, image, url}) {
         this.id = id
         this.mid = mid
@@ -11,6 +14,7 @@ export default class Song {
     }
 }
 
+// 创建Song对象的工厂方法
 export function createSong(musicData) {
     return new Song({
         id: musicData.songid,
@@ -20,7 +24,7 @@ export function createSong(musicData) {
         album: musicData.albumname,
         duration: musicData.interval,
         image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-        url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
+        url: musicData.url
     })
 }
 
@@ -34,4 +38,20 @@ function filterSinger(singer) {
     })
 
     return ret.join('/')
+}
+
+export function processSongsUrl(songs) {
+    return getSongsUrl(songs).then((res) => {
+        if (res.code === ERR_OK) {
+            let urlMid = res.url_mid
+            if (urlMid && urlMid.code === ERR_OK) {
+                let midUrlInfo = urlMid.data.midurlinfo
+                midUrlInfo.forEach((info, index) => {
+                    let song = songs[index]
+                    song.url = `http://dl.stream.qqmusic.qq.com/${info.purl}`
+                })
+            }
+        }
+        return songs
+    })
 }

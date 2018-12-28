@@ -12,6 +12,7 @@ const portfinder = require('portfinder')
 
 const axios = require('axios')
 const express = require('express')
+const bodyParser = require('body-parser')
 
 // 后端代理发送请求
 const app = express()//请求server
@@ -53,6 +54,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         },
 
         before(app) {
+            app.use(bodyParser.urlencoded({extended: true}))
+            const querystring = require('querystring')
+
+            // 通过后端代理获取歌单列表
             app.get('/api/getDisList', (req, res) => {
                 var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
                 axios.get(url, {
@@ -61,6 +66,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                         host: 'c.y.qq.com'
                     },
                     params: req.query
+                }).then((response) => {
+                    res.json(response.data)
+                }).catch((e) => {
+                    console.log(e)
+                })
+            })
+
+            // 获取歌曲信息
+            app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
+                const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+                axios.post(url, req.body, {
+                    headers: {
+                        referer: 'https://y.qq.com/',
+                        origin: 'https://y.qq.com',
+                        'Content-type': 'application/x-www-form-urlencoded'
+                    }
                 }).then((response) => {
                     res.json(response.data)
                 }).catch((e) => {

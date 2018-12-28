@@ -28,6 +28,9 @@ module.exports = {
         'eol-last': 0,    //不检测文件末尾是否有空行
         'space-before-function-paren': 0,   //不检测function的左括号前是否有空行
         'no-new': 0,
-        'indent': [2, 4]
+        'indent': [2, 4],
+        'keyword-spacing': 0,
+        'indent': 0,
+        'vue/require-v-for-key': 0
     }
 }

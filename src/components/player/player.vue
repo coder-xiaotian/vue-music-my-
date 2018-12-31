@@ -19,25 +19,30 @@
             <div class="middle">
                 <div class="middle-l">
                     <div class="cd-wrapper" ref="cdWrapper">
-                        <div class="cd">
+                        <div class="cd" :class="cdCls">
                             <img class="image" :src="currentSong.image">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bottom">
+                <div class="progress-wrapper">
+                    <span class="time time-l">{{format(currentTime)}}</span>
+                    <div class="progress-bar-wrapper"></div>
+                    <span class="time time-r">{{format(currentSong.duration)}}</span>
+                </div>
                 <div class="operators">
                     <div class="icon i-left">
                         <i class="icon-sequence"></i>
                     </div>
-                    <div class="icon i-left">
-                        <i class="icon-prev"></i>
+                    <div class="icon i-left" :class="diableCls">
+                        <i @click="prev" class="icon-prev"></i>
                     </div>
                     <div class="icon i-center">
-                        <i class="icon-play"></i>
+                        <i @click="togglePlaying" :class="playIcon"></i>
                     </div>
-                    <div class="icon i-right">
-                        <i class="icon-next"></i>
+                    <div class="icon i-right" :class="diableCls">
+                        <i @click="next" class="icon-next"></i>
                     </div>
                     <div class="icon i-right">
                         <i class="icon icon-not-favorite"></i>
@@ -49,19 +54,22 @@
         <transition name="mini">
             <div @click="open" class="mini-player" v-show="!fullScreen">
                 <div class="icon">
-                    <img width="40" height="40" :src="currentSong.image">
+                    <img :class="cdCls" width="40" height="40" :src="currentSong.image">
                 </div>
                 <div class="text">
                     <h2 class="name" v-html="currentSong.name"></h2>
                     <p class="desc" v-html="currentSong.singer"></p>
                 </div>
-                <div class="control"></div>
+                <div class="control">
+                    <i @click.stop="togglePlaying" :class="miniIcon"></i>
+                </div>
                 <div class="control">
                     <i class="icon-playlist"></i>
                 </div>
             </div>
         </transition>
-        <audio ref="audio" :src="currentSong.url"></audio>
+        <!--canplay:歌曲准备好能播放时触发，error：歌曲出错时触发，timeupdate：歌曲播放时更新时间-->
+        <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
     </div>
 </template>
 
@@ -73,12 +81,32 @@
     const transform = prefixStyle('transform')
 
     export default {
+        data() {
+            return {
+                songReady: false,
+                currentTime: 0
+            }
+        },
         computed: {
             ...mapGetters([
                 'fullScreen',
                 'playList',
-                'currentSong'
-            ])
+                'currentSong',
+                'currentIndex',
+                'playing'
+            ]),
+            playIcon() {
+                return this.playing ? 'icon-pause' : 'icon-play'
+            },
+            miniIcon() {
+                return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+            },
+            cdCls() {
+                return this.playing ? 'play' : 'play pause'
+            },
+            diableCls() {
+                return this.songReady ? '' : 'disable'
+            }
         },
         methods: {
             open() {
@@ -128,6 +156,70 @@
                 this.$refs.cdWrapper.style.transition = ''
                 this.$refs.cdWrapper.style[transform] = ''
             },
+            togglePlaying() {
+                this.setPlayingState(!this.playing)
+            },
+            next() {
+                // 如果歌曲还不能播放，就不准切换歌曲
+                if(!this.songReady) {
+                    return
+                }
+
+                let index = this.currentIndex + 1
+                if(index === this.playList.length) {
+                    index = 0
+                }
+                this.setCurrentIndex(index)
+                // 如果不是playing状态，就改变其状态，因为只要切换了index就切换了歌曲，一切换歌曲就默认播放
+                if(!this.playing) {
+                    this.togglePlaying()
+                }
+
+                this.songReady = false
+            },
+            prev() {
+                // 如果歌曲还不能播放，就不准切换歌曲
+                if(!this.songReady) {
+                    return
+                }
+
+                let index = this.currentIndex - 1
+                if(index === -1) {
+                    index = this.playList.length
+                }
+                this.setCurrentIndex(index)
+                if(!this.playing) {
+                    this.togglePlaying()
+                }
+
+                this.songReady = false
+            },
+            ready() {
+                this.songReady = true
+            },
+            // 如果歌曲url出现错误导致歌曲无法播放，即永远不会执行ready方法，将会导致prev和next等方法都不能用，所以这里需要error方法做️处理
+            error() {
+                // 为了能出错时也能正常使用
+                this.songReady = true
+            },
+            updateTime(e) {
+                this.currentTime = e.target.currentTime
+            },
+            format(interval) {
+                interval = interval | 0
+                const minute = interval / 60 | 0
+                const second = interval % 60
+                return `${minute}:${second}`
+            },
+            _pad(num, n = 2) {
+                let len = num.toString().length
+                while (len < n) {
+                    num = '0' + num
+                    len++
+                }
+
+                return num
+            },
             _getPosAndScale() {
                 const targetWidth = 40
                 const paddingLeft = 40
@@ -145,13 +237,21 @@
                 }
             },
             ...mapMutations({
-                setFullScreen: 'SET_FULL_SCREEN'
+                setFullScreen: 'SET_FULL_SCREEN',
+                setPlayingState: 'SET_PLAYING_STATE',
+                setCurrentIndex: 'SET_CURRENT_INDEX'
             })
         },
         watch: {
             currentSong() {
                 this.$nextTick(() => {
                     this.$refs.audio.play()
+                })
+            },
+            playing(newPlaying) {
+                const audio = this.$refs.audio
+                this.$nextTick(() => {
+                    newPlaying ? audio.play() : audio.pause()
                 })
             }
         }

@@ -28,7 +28,11 @@
             <div class="bottom">
                 <div class="progress-wrapper">
                     <span class="time time-l">{{format(currentTime)}}</span>
-                    <div class="progress-bar-wrapper"></div>
+                    <div class="progress-bar-wrapper">
+                        <progress-bar :percent="percent"
+                            @percentChange="onProgressBarChange"
+                        ></progress-bar>
+                    </div>
                     <span class="time time-r">{{format(currentSong.duration)}}</span>
                 </div>
                 <div class="operators">
@@ -77,6 +81,7 @@
     import {mapGetters, mapMutations} from 'vuex'
     import animations from 'create-keyframe-animation'
     import {prefixStyle} from 'common/js/dom'
+    import ProgressBar from 'base/progress-bar/progress-bar'
 
     const transform = prefixStyle('transform')
 
@@ -86,6 +91,9 @@
                 songReady: false,
                 currentTime: 0
             }
+        },
+        components: {
+            ProgressBar
         },
         computed: {
             ...mapGetters([
@@ -106,9 +114,20 @@
             },
             diableCls() {
                 return this.songReady ? '' : 'disable'
+            },
+            percent() {
+                return this.currentTime / this.currentSong.duration
             }
         },
         methods: {
+            onProgressBarChange(percent) {
+                this.$refs.audio.currentTime = this.currentSong.duration *  percent
+                if(!this.playing) {
+                    this.togglePlaying()
+                }
+                console.log(this.$refs.audio.currentTime)
+                console.log(this.playing)
+            },
             open() {
                 this.setFullScreen(true)
             },
@@ -209,7 +228,7 @@
                 interval = interval | 0
                 const minute = interval / 60 | 0
                 const second = interval % 60
-                return `${minute}:${second}`
+                return `${minute}:${this._pad(second)}`
             },
             _pad(num, n = 2) {
                 let len = num.toString().length
@@ -344,7 +363,6 @@
                                 width: 100%
                                 height: 100%
                                 border-radius: 50%
-
                     .playing-lyric-wrapper
                         width: 80%
                         margin: 30px auto 0 auto

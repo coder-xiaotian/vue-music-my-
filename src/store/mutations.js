@@ -1,5 +1,4 @@
 import * as types from './mutation-types'
-import {mode} from './getters'
 
 const mutations = {
     [types.SET_SINGER](state, singer) {
@@ -18,7 +17,7 @@ const mutations = {
         state.sequenceList = list
     },
     [types.SET_PLAY_MODE](state, flag) {
-        state.mode = mode
+        state.mode = flag
     },
     [types.SET_CURRENT_INDEX](state, index) {
         state.currentIndex = index

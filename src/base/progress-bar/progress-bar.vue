@@ -31,7 +31,14 @@
         },
         methods: {
             progressClick(e) {
-                this._offset(e.offsetX)
+                // 这里当点击progressBtn的时候，e.offsetX获取不对
+                // this._offset(e.offsetX)
+
+                // getBoundingClientRect()用于获取某个元素相对于视窗的位置集合。集合中有top, right, bottom, left等属性。
+                const rect = this.$refs.progressBar.getBoundingClientRect()
+                // e.pageX获取点击相对于视窗左边的距离
+                const offsetWidth = e.pageX - rect.left
+                this._offset(offsetWidth)
                 this._triggerPercent()
             },
             progressTouchStart(e) {

@@ -33,23 +33,6 @@
             }, 20)
         },
         methods: {
-            _initScroll() {
-                if(!this.$refs.wrapper) {
-                    return
-                }
-                this.scroll = new BScroll(this.$refs.wrapper, {
-                    probeType: this.probeType,
-                    click: this.click
-                })
-
-                if(this.listenScroll) {
-                    // 用me保留scroll实例，因为this.scroll中是只想this.scroll的
-                    let me = this
-                    this.scroll.on('scroll', (pos) => {
-                        me.$emit('scroll', pos)
-                    })
-                }
-            },
             enable() {
                 // 代理调用this.scroll中的enable()方法
                 this.scroll && this.scroll.enable()
@@ -68,6 +51,23 @@
             },
             scrollToElement() {
                 this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+            },
+            _initScroll() {
+                if(!this.$refs.wrapper) {
+                    return
+                }
+                this.scroll = new BScroll(this.$refs.wrapper, {
+                    probeType: this.probeType,
+                    click: this.click
+                })
+
+                if(this.listenScroll) {
+                    // 用me保留scroll实例，因为this.scroll中是只想this.scroll的
+                    let me = this
+                    this.scroll.on('scroll', (pos) => {
+                        me.$emit('scroll', pos)
+                    })
+                }
             }
         },
         watch: {

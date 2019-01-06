@@ -1,5 +1,6 @@
-import {getSongsUrl} from 'api/song'
+import {getSongsUrl, getLyric} from 'api/song'
 import {ERR_OK} from 'api/config'
+import {Base64} from 'js-base64'
 
 class Song {
     constructor({id, mid, singer, name, album, duration, image, url}) {
@@ -12,10 +13,27 @@ class Song {
         this.image = image
         this.url = url
     }
+
+    getLyric() {
+        if(this.lyric) {
+            return Promise.resolve(this.lyric)
+        }
+        return new Promise((resolve, reject) => {
+            getLyric(this.mid).then((res) => {
+                if(res.retcode === ERR_OK) {
+                    this.lyric = Base64.decode(res.lyric)
+                    resolve(this.lyric)
+                } else {
+                    reject('no lyric')
+                }
+            })
+        })
+    }
 }
 
 // 创建Song对象的工厂方法
 export function createSong(musicData) {
+    console.log(musicData)
     return new Song({
         id: musicData.songid,
         mid: musicData.songmid,

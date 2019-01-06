@@ -73,6 +73,23 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                 })
             })
 
+            // 获取歌单详情
+            app.get('/api/getDisc', (req, res) => {
+                const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+
+                axios.get(url, {
+                    headers: {
+                        referer: 'https://y.qq.com/n/yqq/playsquare/4291589977.html',
+                        origin: 'https://y.qq.com'
+                    },
+                    params: req.query
+                }).then((response) => {
+                    res.json(response.data)
+                }).catch((e) => {
+                    console.log(e)
+                })
+            })
+
             // 获取歌曲信息
             app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
                 const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
@@ -82,6 +99,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                         origin: 'https://y.qq.com',
                         'Content-type': 'application/x-www-form-urlencoded'
                     }
+                }).then((response) => {
+                    res.json(response.data)
+                }).catch((e) => {
+                    console.log(e)
+                })
+            })
+
+            // 获取歌词信息
+            app.get('/api/lyric', (req, res) => {
+                var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+                axios.get(url, {
+                    headers: {
+                        referer: 'https://c.y.qq.com/',
+                        host: 'c.y.qq.com'
+                    },
+                    params: req.query
                 }).then((response) => {
                     res.json(response.data)
                 }).catch((e) => {

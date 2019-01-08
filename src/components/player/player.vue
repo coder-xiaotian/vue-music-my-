@@ -455,8 +455,6 @@
                 if(this.currentLyric) {
                     this.currentLyric.stop()
                 }
-                console.log(newSong)
-                console.log(oldSong)
 
                 setTimeout(() => {
                     this.$refs.audio.play()

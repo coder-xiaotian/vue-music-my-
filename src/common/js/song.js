@@ -33,7 +33,6 @@ class Song {
 
 // 创建Song对象的工厂方法
 export function createSong(musicData) {
-    console.log(musicData)
     return new Song({
         id: musicData.songid,
         mid: musicData.songmid,

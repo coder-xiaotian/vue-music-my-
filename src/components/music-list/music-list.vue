@@ -45,15 +45,18 @@
         props: {
             bgImage: {
                 type: String,
-                default: ''
+                default: '',
+                required: true
             },
             songs: {
                 type: Array,
-                default: null
+                default: null,
+                required: true
             },
             title: {
                 type: String,
-                default: ''
+                default: '',
+                required: true
             }
         },
         data() {

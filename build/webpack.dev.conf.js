@@ -123,7 +123,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             })
 
             // 搜索
-            app.get('api/searchFor', (req, res) => {
+            app.get('/api/searchFor', (req, res) => {
                 var url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
                 axios.get(url, {
                     headers: {

@@ -13,25 +13,26 @@ export function getHotKey() {
     return jsonp(url, data, options)
 }
 
-export function searchFor(searchKey, page) {
-    const url = 'api/searchFor'
+export function search(query, page, zhida, perpage) {
+    const url = '/api/searchFor'
 
     const data = Object.assign({}, commonParams, {
         uin: 0,
         platform: 'h5',
         needNewCode: 1,
-        w: searchKey,
+        w: query,
         zhidaqu: 1,
-        catZhida: 1,
+        catZhida: zhida ? 1 : 0,
         t: 0,
         flag: 1,
         ie: 'utf-8',
         sem: 1,
         aggr: 0,
-        perpage: 20,
-        n: 20,
+        perpage,
+        n: perpage,
         p: page,
-        remoteplace: 'txt.mqq.all'
+        remoteplace: 'txt.mqq.all',
+        format: 'json'
     })
 
     return axios.get(url, {

@@ -92,10 +92,11 @@
                     </progress-circle>
                 </div>
                 <div class="control">
-                    <i class="icon-playlist"></i>
+                    <i class="icon-playlist" @click.stop="showPlaylist"></i>
                 </div>
             </div>
         </transition>
+        <playlist ref="playlist"></playlist>
         <!--canplay:歌曲准备好能播放时触发，error：歌曲出错时触发，timeupdate：歌曲播放时更新时间-->
         <audio ref="audio" :src="currentSong.url"
                @canplay="ready"
@@ -113,14 +114,16 @@
     import ProgressBar from 'base/progress-bar/progress-bar'
     import ProgressCircle from 'base/progress-circle/progress-circle'
     import {playMode} from 'common/js/config'
-    import {shuffle} from 'common/js/util'
     import Lyric from 'lyric-parser'
     import Scroll from 'base/scroll/scroll'
+    import Playlist from 'components/playlist/playlist'
+    import {playerMixin} from 'common/js/mixin'
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
 
     export default {
+        mixins: [playerMixin],
         data() {
             return {
                 songReady: false,
@@ -138,17 +141,14 @@
         components: {
             ProgressBar,
             ProgressCircle,
-            Scroll
+            Scroll,
+            Playlist
         },
         computed: {
             ...mapGetters([
                 'fullScreen',
-                'playList',
-                'currentSong',
                 'currentIndex',
-                'playing',
-                'mode',
-                'sequenceList'
+                'playing'
             ]),
             playIcon() {
                 return this.playing ? 'icon-pause' : 'icon-play'
@@ -164,31 +164,11 @@
             },
             percent() {
                 return this.currentTime / this.currentSong.duration
-            },
-            iconMode() {
-                return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop
-                    ? 'icon-loop' : 'icon-random'
             }
         },
         methods: {
-            changeMode() {
-                const mode = (this.mode + 1) % 3
-                this.setPlayMode(mode)
-                let list = null
-                if(mode === playMode.random) {
-                    list = shuffle(this.sequenceList)
-                } else {
-                    list = this.sequenceList
-                }
-                this.resetCurrentIndex(list)
-                this.setPlayList(list)
-            },
-            resetCurrentIndex(list) {
-                let index = list.findIndex((item) => {
-                    return item.id === this.currentSong.id
-                })
-
-                this.setCurrentIndex(index)
+            showPlaylist() {
+                this.$refs.playlist.show()
             },
             onProgressBarChange(percent) {
                 const currentTime = this.currentSong.duration * percent
@@ -438,16 +418,12 @@
                 }
             },
             ...mapMutations({
-                setFullScreen: 'SET_FULL_SCREEN',
-                setPlayingState: 'SET_PLAYING_STATE',
-                setCurrentIndex: 'SET_CURRENT_INDEX',
-                setPlayMode: 'SET_PLAY_MODE',
-                setPlayList: 'SET_PLAYLIST'
+                setFullScreen: 'SET_FULL_SCREEN'
             })
         },
         watch: {
             currentSong(newSong, oldSong) {
-                if(newSong.id === oldSong.id) {
+                if(newSong.id === oldSong.id || !newSong.id) {
                     return
                 }
 

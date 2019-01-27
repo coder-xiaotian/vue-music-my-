@@ -10,8 +10,26 @@
             <div class="search-box-wrapper">
                 <search-box ref="searchBox" @query="onQueryChange" placeholder="搜索歌曲"></search-box>
             </div>
-            <div class="shortcut">
-                <switches :currentIndex="currentIndex" :switches="switches"></switches>
+            <div class="shortcut" v-show="!query">
+                <switches :currentIndex="currentIndex"
+                          :switches="switches"
+                          @switch="switchItem"
+                ></switches>
+                <div class="list-wrapper">
+                    <scroll ref="songList" class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+                        <div class="list-inner">
+                            <song-list :songs="playHistory" @select="selectSong"></song-list>
+                        </div>
+                    </scroll>
+                    <scroll :refreshDelay="refreshDelay" ref="searchList" class="list-scroll" v-if="currentIndex ===1" :data="searchHistory">
+                        <div class="list-inner">
+                            <search-list @delete="deleteSearchHistory"
+                                         @selete="addQuery"
+                                         :searches="searchHistory"
+                            ></search-list>
+                        </div>
+                    </scroll>
+                </div>
             </div>
             <div class="search-result" v-show="query">
                 <suggest :query="query"
@@ -20,6 +38,12 @@
                          @listScroll="blurInput"
                         ></suggest>
             </div>
+            <top-tip ref="topTip">
+                <div class="tip-title">
+                    <i class="icon-ok"></i>
+                    <span class="text">该歌曲已经添加到播放列表</span>
+                </div>
+            </top-tip>
         </div>
     </transition>
 </template>
@@ -29,6 +53,12 @@
     import Suggest from 'components/suggest/suggest'
     import {searchMixin} from 'common/js/mixin'
     import Switches from 'base/switches/switches'
+    import Scroll from 'base/scroll/scroll'
+    import {mapGetters, mapActions} from 'vuex'
+    import SongList from 'base/song-list/song-list'
+    import Song from 'common/js/song'
+    import SearchList from 'base/search-list/search-list'
+    import TopTip from 'base/top-tip/top-tip'
 
     export default {
         mixins: [searchMixin],
@@ -37,27 +67,59 @@
                 showFlag: false,
                 showSinger: false,
                 currentIndex: 0,
-                switch: [
+                switches: [
                     {name: '最近播放'},
                     {name: '搜索历史'}
                 ]
             }
         },
+        computed: {
+            ...mapGetters([
+                'playHistory'
+            ])
+        },
         components: {
             SearchBox,
             Suggest,
-            Switches
+            Switches,
+            Scroll,
+            SongList,
+            SearchList,
+            TopTip
         },
         methods: {
+            showTip() {
+                this.$refs.topTip.show()
+            },
+            selectSong(song, index) {
+                // 第一首是当前播放歌曲，所以不作操作
+                if(index !== 0) {
+                    this.insertSong(new Song(song))
+                    this.showTip()
+                }
+            },
+            switchItem(index) {
+                this.currentIndex = index
+            },
             show() {
                 this.showFlag = true
+                setTimeout(() => {
+                    if(this.currentIndex === 0) {
+                        this.$refs.songList.refresh()
+                    } else {
+                        this.$refs.searchList.refresh()
+                    }
+                })
             },
             hide() {
                 this.showFlag = false
             },
             selectSuggest() {
                 this.saveSearch()
-            }
+            },
+            ...mapActions([
+                'insertSong'
+            ])
         }
     }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="song-list">
         <ul>
-            <li @click="selectItem(song, index)" class="item" v-for="(song, index) in songs">
+            <li @click="selectItem(song, index)" class="item" v-for="(song, index) in songs" :key="song.id">
                 <div v-show="rank" class="rank">
                     <span :class="getRankCls(index)" v-text="getRankText(index)"></span>
                 </div>
@@ -25,6 +25,9 @@
                 type: Boolean,
                 default: false
             }
+        },
+        mounted() {
+            console.log(this.songs)
         },
         methods: {
             getDesc(song) {

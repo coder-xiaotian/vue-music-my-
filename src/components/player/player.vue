@@ -71,7 +71,7 @@
                         <i @click="next" class="icon-next"></i>
                     </div>
                     <div class="icon i-right">
-                        <i class="icon icon-not-favorite"></i>
+                        <i class="icon" :class="getFavoriteIcon(currentSong)" @click="toggleFavorite(currentSong)"></i>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
     import animations from 'create-keyframe-animation'
     import {prefixStyle} from 'common/js/dom'
     import ProgressBar from 'base/progress-bar/progress-bar'
@@ -296,6 +296,7 @@
             },
             ready() {
                 this.songReady = true
+                this.savePlayHistory(this.currentSong)
             },
             // 如果歌曲url出现错误导致歌曲无法播放，即永远不会执行ready方法，将会导致prev和next等方法都不能用，所以这里需要error方法做️处理
             error() {
@@ -419,7 +420,10 @@
             },
             ...mapMutations({
                 setFullScreen: 'SET_FULL_SCREEN'
-            })
+            }),
+            ...mapActions([
+                'savePlayHistory'
+            ])
         },
         watch: {
             currentSong(newSong, oldSong) {

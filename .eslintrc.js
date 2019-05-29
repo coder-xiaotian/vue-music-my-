@@ -31,6 +31,8 @@ module.exports = {
         'indent': [2, 4],
         'keyword-spacing': 0,
         'indent': 0,
-        'vue/require-v-for-key': 0
+        'vue/require-v-for-key': 0,
+        'vue/require-valid-default-prop': 0,
+        'prefer-promise-reject-errors': 0
     }
 }

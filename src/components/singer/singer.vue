@@ -92,6 +92,7 @@
             })
         },
         created() {
+            console.log(this.singers)
             this._getSingerList()
         },
         components: {

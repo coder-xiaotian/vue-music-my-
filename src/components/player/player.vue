@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <scroll class="middle-r" ref="lyricList"
-                        :data="currentLyric && currentLyric.lines">
+                        :data="(currentLyric && currentLyric.lines) || []">
                     <div class="lyric-wrapper">
                         <div v-if="currentLyric">
                             <p ref="lyricLine"

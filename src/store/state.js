@@ -14,7 +14,6 @@ const state = {
     searchHistory: loadSearch(),
     playHistory: loadPlay(),
     favoriteList: loadFavorite()
-
 }
 
 export default state

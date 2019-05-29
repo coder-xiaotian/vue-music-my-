@@ -9,8 +9,7 @@
     import {mapGetters} from 'vuex'
     import {getMusicList} from 'api/rank'
     import {ERR_OK} from 'api/config'
-    import {createSong} from 'common/js/song'
-    import {processSongsUrl} from 'common/js/song'
+    import {createSong, processSongsUrl} from 'common/js/song'
 
     const FOR_FREE = 0
     export default {

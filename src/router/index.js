@@ -3,46 +3,46 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const Recommend = ((resolve) => {
+const Recommend = (resolve) => {
     import('components/recommend/recommend').then((module) => {
         resolve(module)
     })
-})
-const Singer = ((resolve) => {
+}
+const Singer = (resolve) => {
     import('components/singer/singer').then((module) => {
         resolve(module)
     })
-})
-const Rank = ((resolve) => {
+}
+const Rank = (resolve) => {
     import('components/rank/rank').then((module) => {
         resolve(module)
     })
-})
-const Search = ((resolve) => {
+}
+const Search = (resolve) => {
     import('components/search/search').then((module) => {
         resolve(module)
     })
-})
-const SingerDetail = ((resolve) => {
+}
+const SingerDetail = (resolve) => {
     import('components/singer-detail/singer-detail').then((module) => {
         resolve(module)
     })
-})
-const TopList = ((resolve) => {
+}
+const TopList = (resolve) => {
     import('components/top-list/top-list').then((module) => {
         resolve(module)
     })
-})
-const Disc = ((resolve) => {
+}
+const Disc = (resolve) => {
     import('components/disc/disc').then((module) => {
         resolve(module)
     })
-})
-const UserCenter = ((resolve) => {
+}
+const UserCenter = (resolve) => {
     import('components/user-center/user-center').then((module) => {
         resolve(module)
     })
-})
+}
 
 export default new Router({
     routes: [

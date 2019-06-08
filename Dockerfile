@@ -14,4 +14,4 @@ RUN npm install \
     && cp ./dist/* /var/www/html \
     && rm -rf /app
 
-CMD ["nginx", "-g", "daemon off"]
+CMD ["nginx", "-g", "daemon off;"]

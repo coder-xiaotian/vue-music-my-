@@ -14,6 +14,7 @@ RUN npm install \
     && npm run build \
     && mv ./dist/favicon.ico ./dist/static \
     && cp -r ./dist/* /var/www/html \
-    && rm -rf /app
+    && rm -rf `ls | grep -v prod.server.js` \
+    && node prod.server.js
 
 CMD ["nginx", "-g", "daemon off;"]

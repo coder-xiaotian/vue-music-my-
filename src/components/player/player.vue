@@ -99,7 +99,7 @@
         <playlist ref="playlist"></playlist>
         <!--canplay:歌曲准备好能播放时触发，error：歌曲出错时触发，timeupdate：歌曲播放时更新时间-->
         <audio ref="audio" :src="currentSong.url"
-               @canplay="ready"
+               @play="ready"
                @error="error"
                @timeupdate="updateTime"
                @ended="end"
@@ -259,6 +259,7 @@
 
                 if(this.playList.length === 1) {
                     this.loop()
+                    return
                 } else {
                     let index = this.currentIndex + 1
                     if(index === this.playList.length) {
@@ -281,6 +282,7 @@
 
                 if(this.playList.length === 1) {
                     this.loop()
+                    return
                 } else {
                     let index = this.currentIndex - 1
                     if (index === -1) {
@@ -314,6 +316,9 @@
             },
             getLyric() {
                 this.currentSong.getLyric().then((lyric) => {
+                    if(this.currentSong.lyric !== lyric) {
+                        return
+                    }
                     this.currentLyric = new Lyric(lyric, this.handleLyric)
                     if(this.playing) {
                         this.currentLyric.play()
@@ -436,7 +441,9 @@
                     this.currentLyric.stop()
                 }
 
-                setTimeout(() => {
+                // 为了当手机将程序切换到后台，js也能运行，所以设置1s延迟
+                clearTimeout(this.timer)
+                this.timer = setTimeout(() => {
                     this.$refs.audio.play()
                     this.getLyric()
                 }, 1000)

@@ -26,9 +26,6 @@
                 default: false
             }
         },
-        mounted() {
-            console.log(this.songs)
-        },
         methods: {
             getDesc(song) {
                 return `${song.singer}·${song.album}`

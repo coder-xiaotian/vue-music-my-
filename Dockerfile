@@ -11,6 +11,7 @@ EXPOSE 80
 
 RUN npm install \
     && npm run build \
+    && mv ./dist/favicon.ico ./dist/static \ # 将favicon.ico放到dist/static中，否则会找不到
     && cp -r ./dist/* /var/www/html \
     && rm -rf /app
 

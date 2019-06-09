@@ -15,8 +15,6 @@ RUN npm install \
     && mv ./dist/favicon.ico ./dist/static \
     # && cp -r ./dist/* /var/www/html \
     && npm install pm2@latest -g \
-    && npm install express -g \
-    && rm -rf `ls | egrep -v '(prod.server.js|dist)'`
 
 # CMD ["nginx", "-g", "daemon off;"]
 CMD pm2-runtime prod.server.js

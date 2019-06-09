@@ -17,4 +17,4 @@ RUN npm install \
     && npm install pm2@latest -g \
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD pm2-runtime prod.server.js
+CMD ["pm2", "start", "prod.server.js"]

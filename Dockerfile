@@ -13,8 +13,7 @@ EXPOSE 80
 RUN npm install \
     && npm run build \
     && mv ./dist/favicon.ico ./dist/static \
-    # && cp -r ./dist/* /var/www/html \
-    && npm install pm2@latest -g \
+    # && cp -r ./dist/* /var/www/html
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD ["pm2", "start", "prod.server.js"]
+CMD ["npm", "run", "prd"]

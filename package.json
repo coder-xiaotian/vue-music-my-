@@ -8,7 +8,8 @@
         "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
         "start": "npm run dev",
         "lint": "eslint --ext .js,.vue src",
-        "build": "node build/build.js"
+        "build": "node build/build.js",
+        "prd": "pm2 start ecosystem.config.js --env production"
     },
     "dependencies": {
         "axios": "^0.16.1",
@@ -23,7 +24,8 @@
         "vue": "^2.5.2",
         "vue-lazyload": "^1.0.3",
         "vue-router": "^3.0.1",
-        "vuex": "^3.0.1"
+        "vuex": "^3.0.1",
+        "pm2": "^3.5.1"
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

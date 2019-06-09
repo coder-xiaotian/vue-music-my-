@@ -9,7 +9,7 @@
         "start": "npm run dev",
         "lint": "eslint --ext .js,.vue src",
         "build": "node build/build.js",
-        "prd": "pm2 start ecosystem.config.js --env production"
+        "prd": "pm2 start prod.server.js --env production"
     },
     "dependencies": {
         "axios": "^0.16.1",

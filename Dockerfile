@@ -14,7 +14,7 @@ RUN npm install \
     && npm run build \
     && mv ./dist/favicon.ico ./dist/static \
     # && cp -r ./dist/* /var/www/html \
-    && npm install pm2 \
+    && npm install pm2@latest -g \
     && pm2 start prod.server.js \
     && rm -rf `ls | grep -v prod.server.js`
 

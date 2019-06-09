@@ -8,7 +8,8 @@ COPY prod.server.js .
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install --production
+RUN npm install --production \
+    && npm install -g express
 
 # Show current folder structure in logs
 #RUN ls -al -R

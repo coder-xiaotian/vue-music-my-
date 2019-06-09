@@ -1,10 +1,9 @@
 /* 起服务：将打包后的代码运行在服务之上 */
 var express = require('express')
-var config = require('./config/index')
 var axios = require('axios')
 var bodyParser = require('body-parser')
 /* process是全局变量无需引入 */
-var port = process.env.PORT || config.build.port
+var port = 80
 
 var app = express()
 

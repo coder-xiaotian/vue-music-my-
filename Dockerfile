@@ -1,7 +1,7 @@
 FROM node:12.3.1
 
-RUN apt-get update \
-    && apt-get install -y nginx
+# RUN apt-get update \
+#    && apt-get install -y nginx
 
 WORKDIR /app
 
@@ -13,8 +13,9 @@ EXPOSE 80
 RUN npm install \
     && npm run build \
     && mv ./dist/favicon.ico ./dist/static \
-    && cp -r ./dist/* /var/www/html \
-    && node prod.server.js \
+    # && cp -r ./dist/* /var/www/html \
+    && npm install pm2 \
+    && pm2 start prod.server.js \
     && rm -rf `ls | grep -v prod.server.js`
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]

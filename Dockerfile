@@ -2,7 +2,7 @@ FROM keymetrics/pm2:latest-alpine
 
 WORKDIR app
 # Bundle APP files
-COPY . src/
+COPY ./ src/
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn

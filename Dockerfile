@@ -16,4 +16,4 @@ RUN npm install \
     # && cp -r ./dist/* /var/www/html
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD ["npm", "run", "prd"]
+CMD npm run prd

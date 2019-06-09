@@ -1,19 +1,16 @@
-FROM node:12.3.1
+FROM keymetrics/pm2:latest-alpine
 
-# RUN apt-get update \
-#    && apt-get install -y nginx
+# Bundle APP files
+COPY src src/
+COPY package.json .
+COPY pm2.json .
+COPY prod.server.js .
 
-WORKDIR /app
+# Install app dependencies
+ENV NPM_CONFIG_LOGLEVEL warn
+RUN npm install --production
 
-COPY . /app/
+# Show current folder structure in logs
+RUN ls -al -R
 
-EXPOSE 80
-
-# 第三步是将favicon.ico放到dist/static中,否则会找不到
-RUN npm install \
-    && npm run build \
-    && mv ./dist/favicon.ico ./dist/static \
-    # && cp -r ./dist/* /var/www/html
-
-# CMD ["nginx", "-g", "daemon off;"]
-CMD npm run prd
+CMD [ "pm2-runtime", "start", "pm2.json" ]

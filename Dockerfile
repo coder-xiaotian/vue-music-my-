@@ -16,7 +16,7 @@ RUN npm install \
     # && cp -r ./dist/* /var/www/html \
     && npm install pm2@latest -g \
     && npm install express -g \
-    && rm -rf `ls | grep -v '(prod.server.js|./dist)'`
+    && rm -rf `ls | egrep -v '(prod.server.js|./dist)'`
 
 # CMD ["nginx", "-g", "daemon off;"]
 CMD pm2-runtime prod.server.js

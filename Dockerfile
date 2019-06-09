@@ -1,10 +1,7 @@
 FROM keymetrics/pm2:latest-alpine
 
 # Bundle APP files
-COPY src src/
-COPY package.json .
-COPY pm2.json .
-COPY prod.server.js .
+COPY . src/
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn

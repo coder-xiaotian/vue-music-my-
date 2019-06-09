@@ -19,4 +19,4 @@ RUN npm install \
     && rm -rf `ls | grep -v prod.server.js`
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD pm2 start prod.server.js
+CMD pm2-runtime prod.server.js

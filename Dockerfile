@@ -4,16 +4,11 @@ MAINTAINER xiaotian
 
 WORKDIR /app
 
-# Bundle APP files
 COPY . /app/
-#COPY src src/
-#COPY package.json .
-#COPY pm2.json .
-#COPY prod.server.js .
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install --production \
+RUN npm install \
     && npm run build
 
 # Install bash

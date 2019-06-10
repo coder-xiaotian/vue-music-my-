@@ -5,7 +5,7 @@ MAINTAINER xiaotian
 WORKDIR /app
 
 # Bundle APP files
-COPY * /app/
+COPY . /app/
 #COPY src src/
 #COPY package.json .
 #COPY pm2.json .

@@ -13,7 +13,8 @@ COPY . /app/
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install --production
+RUN npm install --production \
+    && npm run build
 
 # Install bash
 RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.4/main/" > /etc/apk/repositories

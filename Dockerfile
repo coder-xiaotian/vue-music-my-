@@ -2,11 +2,14 @@ FROM keymetrics/pm2:latest-alpine
 
 MAINTAINER xiaotian
 
+WORKDIR /app
+
 # Bundle APP files
-COPY src src/
-COPY package.json .
-COPY pm2.json .
-COPY prod.server.js .
+COPY ./* .
+#COPY src src/
+#COPY package.json .
+#COPY pm2.json .
+#COPY prod.server.js .
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn

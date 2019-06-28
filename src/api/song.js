@@ -2,10 +2,8 @@ import {commonParams} from './config'
 import {getUid} from 'common/js/uid'
 import axios from 'axios'
 
-const debug = process.env.NODE_ENV !== 'production'
-
 export function getSongsUrl(songs) {
-    const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl'
+    const url = '/api/getPurlUrl'
 
     let mids = []
     let types = []

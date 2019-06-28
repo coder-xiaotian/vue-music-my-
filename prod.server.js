@@ -6,8 +6,6 @@ var bodyParser = require('body-parser')
 /* process是全局变量无需引入 */
 var port = 80
 
-console.log(process.env)
-
 var app = express()
 
 var apiRoutes = express.Router()

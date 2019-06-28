@@ -1,14 +1,14 @@
 /* 起服务：将打包后的代码运行在服务之上 */
-var express = require('express')
+let express = require('express')
 // var config = require('./config/index')
-var axios = require('axios')
-var bodyParser = require('body-parser')
+let axios = require('axios')
+let bodyParser = require('body-parser')
 /* process是全局变量无需引入 */
-var port = 80
+let port = 80
 
-var app = express()
+let app = express()
 
-var apiRoutes = express.Router()
+let apiRoutes = express.Router()
 
 /* 用来解析req.body的数据 解析成功覆盖原来的req.body,解析失败则为{} */
 /* extend选项用来配置使用querystring(false)或qs(true)来解析数据*/
@@ -16,7 +16,7 @@ var apiRoutes = express.Router()
 apiRoutes.use(bodyParser.urlencoded({extended:true}))
 /* 歌单 */
 apiRoutes.get('/api/getDisList', function (req, res) {
-    var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+    let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
     axios.get(url, {
         headers: {
             referer: 'https://c.y.qq.com/',
@@ -79,7 +79,7 @@ apiRoutes.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
 
 // 获取歌词信息
 apiRoutes.get('/api/lyric', (req, res) => {
-    var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+    let url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
     axios.get(url, {
         headers: {
             referer: 'https://c.y.qq.com/',
@@ -95,7 +95,7 @@ apiRoutes.get('/api/lyric', (req, res) => {
 
 // 搜索
 apiRoutes.get('/api/searchFor', (req, res) => {
-    var url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+    let url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
     axios.get(url, {
         headers: {
             referer: 'https://y.qq.com/m/index.html',

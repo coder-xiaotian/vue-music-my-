@@ -12,7 +12,7 @@
         "prd": "pm2 start prod.server.js --env production"
     },
     "dependencies": {
-        "axios": "^0.16.1",
+        "axios": "^0.19.0",
         "babel-runtime": "^6.0.0",
         "better-scroll": "^0.1.15",
         "create-keyframe-animation": "^0.1.0",
